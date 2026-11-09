@@ -16,7 +16,6 @@ from app.auth.auth_services import (
     decode_token,
     get_password_hash,
     revoke_refresh_token,
-    rotate_refresh_token,
     send_otp_email,
     send_password_reset_email,
     verify_password,

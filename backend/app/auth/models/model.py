@@ -42,6 +42,13 @@ class User(Base):
         passive_deletes=True,
     )
 
+    agents = relationship(
+        "Agent",
+        back_populates="user",
+        cascade="all, delete-orphan",
+        passive_deletes=True
+    )
+
 
 class OAuthAccount(Base):
     __tablename__ = "oauth_accounts"

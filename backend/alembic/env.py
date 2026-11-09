@@ -31,6 +31,7 @@ config.set_main_option(
 # Import Base and all models
 from database import Base
 from app.auth.models.model import User, OAuthAccount, RefreshToken
+from app.agent.models.model import Agent
 
 # Metadata for autogenerate
 target_metadata = Base.metadata
