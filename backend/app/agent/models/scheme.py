@@ -1,14 +1,12 @@
 from pydantic import BaseModel, Field
-from typing import Dict, List
-
-
+from uuid import UUID
 
 
 class AgentCreate(BaseModel):
-    userId : int
-    agentName : str | None = Field(...)
-    agentDescription : str
+    userId: UUID
+    agentName: str | None = Field(...)
+    agentDescription: str
 
 
 class AgentDelete(BaseModel):
-    agentId : int
+    agentId: UUID

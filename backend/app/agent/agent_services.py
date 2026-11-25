@@ -1,6 +1,8 @@
 
+from uuid import UUID
+
 from sqlalchemy.ext.asyncio import AsyncSession
-from .models.scheme import AgentCreate, AgentDelete
+from .models.scheme import AgentCreate
 from .models.model import Agent
 from app.auth.models.model import User
 
@@ -45,7 +47,7 @@ async def create_agents(db : AsyncSession,
 
 async def delete_agents(
     db: AsyncSession,
-    agent_id: int,
+    agent_id: UUID,
     current_user: User,
 ) -> None:
     
@@ -65,15 +67,6 @@ async def delete_agents(
 
     try:
         await db.delete(agent)
-        await db.commit()
-
-        result = await db.execute(select(Agent).order_by(Agent.agentId))
-
-        rows = result.scalars().all()
-
-        for new_id, row in enumerate(rows, start=1):
-            row.agentId = new_id
-
         await db.commit()
 
     except Exception:

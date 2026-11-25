@@ -1,5 +1,6 @@
 import random
 from datetime import datetime, timedelta, timezone
+from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from jwt.exceptions import InvalidTokenError
@@ -71,8 +72,8 @@ async def register_user(payload: RegisterRequest, db: AsyncSession = Depends(get
 async def verify_email_token(payload: VerifyEmailRequest, db: AsyncSession = Depends(get_db)):
     try:
         decoded = decode_token(payload.token, EMAIL_VERIFY_TOKEN_TYPE)
-        user_id = int(decoded["sub"])
-    except (InvalidTokenError, ValueError, TypeError) as exc:
+        user_id = UUID(decoded["sub"])
+    except (InvalidTokenError, ValueError, TypeError, AttributeError) as exc:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Invalid or expired verification token",
@@ -216,8 +217,8 @@ async def reset_password(
 ):
     try:
         decoded = decode_token(payload.token, PASSWORD_RESET_TOKEN_TYPE)
-        user_id = int(decoded["sub"])
-    except (InvalidTokenError, ValueError, TypeError) as exc:
+        user_id = UUID(decoded["sub"])
+    except (InvalidTokenError, ValueError, TypeError, AttributeError) as exc:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Invalid or expired reset token",

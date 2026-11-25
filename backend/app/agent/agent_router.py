@@ -1,9 +1,11 @@
+from uuid import UUID
+
 from fastapi import APIRouter, status, Depends
 from database import get_db
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from .models.scheme import AgentCreate, AgentDelete
+from .models.scheme import AgentCreate
 
 from .agent_services import create_agents, delete_agents
 from app.auth.models.model import User
@@ -64,7 +66,7 @@ async def get_agent(
 
 @router.delete("/{agent_id}/delete-agent")
 async def delete_agent(
-    agent_id: int,
+    agent_id: UUID,
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):

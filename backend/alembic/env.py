@@ -32,6 +32,7 @@ config.set_main_option(
 from database import Base
 from app.auth.models.model import User, OAuthAccount, RefreshToken
 from app.agent.models.model import Agent
+from app.chat.models.model import Chat, ChatMessage
 
 # Metadata for autogenerate
 target_metadata = Base.metadata
