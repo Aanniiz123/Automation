@@ -1,15 +1,16 @@
 from sqlalchemy import (
-    Column, Integer, String, Boolean, ForeignKey, DateTime,
-    UniqueConstraint, BigInteger, func,
+    Column, String, Boolean, ForeignKey, DateTime,
+    UniqueConstraint, BigInteger, Uuid, func,
 )
 from sqlalchemy.orm import relationship
+from uuid import uuid4
 from database import Base
 
 
 class User(Base):
     __tablename__ = "users"
 
-    id = Column(Integer, primary_key=True)
+    id = Column(Uuid(as_uuid=True), primary_key=True, default=uuid4)
     email = Column(String(255), unique=True, index=True, nullable=False)
     hashed_password = Column(String(255), nullable=True)
     is_active = Column(Boolean, default=True, nullable=False)
@@ -42,6 +43,13 @@ class User(Base):
         passive_deletes=True,
     )
 
+    agents = relationship(
+        "Agent",
+        back_populates="user",
+        cascade="all, delete-orphan",
+        passive_deletes=True
+    )
+
 
 class OAuthAccount(Base):
     __tablename__ = "oauth_accounts"
@@ -54,10 +62,10 @@ class OAuthAccount(Base):
         ),
     )
 
-    id = Column(Integer, primary_key=True)
+    id = Column(Uuid(as_uuid=True), primary_key=True, default=uuid4)
 
     user_id = Column(
-        Integer,
+        Uuid(as_uuid=True),
         ForeignKey("users.id", ondelete="CASCADE"),
         index=True,
         nullable=False,
@@ -81,10 +89,10 @@ class OAuthAccount(Base):
 class RefreshToken(Base):
     __tablename__ = "refresh_tokens"
 
-    id = Column(Integer, primary_key=True)
+    id = Column(Uuid(as_uuid=True), primary_key=True, default=uuid4)
 
     user_id = Column(
-        Integer,
+        Uuid(as_uuid=True),
         ForeignKey("users.id", ondelete="CASCADE"),
         index=True,
         nullable=False,

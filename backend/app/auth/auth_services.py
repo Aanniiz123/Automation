@@ -1,6 +1,7 @@
 import hashlib
 from datetime import datetime, timedelta, timezone
 from typing import Any
+from uuid import UUID
 
 import aiosmtplib
 import jwt
@@ -121,7 +122,7 @@ async def create_user(db: AsyncSession, user_create: UserCreate) -> User:
     return new_user
 
 
-async def create_user_token(db: AsyncSession, user_id: int) -> dict:
+async def create_user_token(db: AsyncSession, user_id: UUID) -> dict:
     access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     refresh_token_expires = timedelta(minutes=settings.REFRESH_TOKEN_EXPIRE_MINUTES)
 
@@ -342,4 +343,4 @@ async def authenticate_google_user(db: AsyncSession, token: str) -> dict:
             detail="Inactive user",
         )
 
-    return await create_user_token(db, int(user.id))
+    return await create_user_token(db, user.id)

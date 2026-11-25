@@ -1,4 +1,5 @@
 from datetime import datetime
+from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, EmailStr, Field
 
@@ -11,7 +12,7 @@ class Token(BaseModel):
 
 
 class TokenData(BaseModel):
-    user_id: int | None = Field(
+    user_id: UUID | None = Field(
         default=None, description="User ID from the token's 'sub' claim"
     )
 
@@ -42,7 +43,7 @@ class UserUpdate(BaseModel):
 class UserRead(UserBase):
     model_config = ConfigDict(from_attributes=True)
 
-    id: int
+    id: UUID
     is_active: bool = True
     is_verified: bool = False
     created_at: datetime
@@ -57,7 +58,7 @@ class UserInDB(UserRead):
 class OAuthAccountRead(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
-    id: int
+    id: UUID
     provider: str
     provider_account_id: str
     created_at: datetime
